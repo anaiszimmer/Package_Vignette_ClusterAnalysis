@@ -1,0 +1,491 @@
+---
+title: "**Module: Cluster Analysis**"
+output:
+  html_document:
+    toc: true
+    number_sections: true 
+    toc_float: true
+    toc_depth: 2
+    smooth_srcoll: true 
+  
+  
+---
+<p>&nbsp;</p>
+
+# **Objectives**
+
+In this module, we explore the use of clustering or cluster analysis to assign observations to groups (clusters) so that observations within each group are similar to one another with respect to variables or attributes of interest, and the groups themselves stand apart from one another. 
+<p>&nbsp;</p>
+
+# **Preliminaries**
+
+* Install this package in R: {factorextra}
+* Load {tidyverse}, {factoextra}
+<p>&nbsp;</p>
+
+```{r, echo=FALSE}
+
+library(tidyverse)
+library(factoextra)
+
+```
+
+# **Overview of cluster analysis**
+
+The objective of cluster analysis is to divide the observations into homogeneous and distinct groups.
+In contrast to classification methods - where each observation is assigned to a known class and the objective is to predict the group to which a new observation belongs, cluster analysis seeks to discover the number and composition of the groups. Therefore Cluster analysis allows for the detection of natural partitioning of objects or features and help to discover structures and patterns in high-dimensional data. 
+
+
+```{r, fig.cap="*Principles of Cluster analysis*", out.width = '80%',echo=FALSE}
+knitr::include_graphics("images/Clusters.jpg")
+```
+<p>&nbsp;</p>
+
+## **Applications of Cluster Analysis**
+
+Clustering analysis is broadly used in many applications such as market research, pattern recognition, data analysis, and image processing. Here are some example of clustering applications:
+
+* **Market Segmentation**: Grouping people (with the willingness, purchasing power, and the authority to buy) according to their similarity in several dimensions related to a product under consideration.
+
+* **Sales Segmentation**: Clustering can tell us what types of customers buy what products
+
+* **Human health**: Identifying groups of populations that have not develop covid according to their geographical location, health history, blood group, ect.
+
+* **Geographical**: Identification of areas of similar land use in an earth observation database
+
+* **Population genetics**: Grouping monkey individuals to probe their genetic relationships among regions or continents.
+
+* **Geology and Geomorphology**: Clustering applying to geochemical data can help us to classify soil type and geology. 
+We will go over this example in the second part of this module.
+
+<p>&nbsp;</p>
+
+## **Types of Cluster Analysis**
+
+Clustering methods can be classified into the following categories:
+
+* **Partitioning Method or non-hierarchical**
+
+A division of objects into non-overlaping subsets (clusters) such that each object is exactly on cluster.
+The non-hierarchical methods divide a dataset of N objects into M clusters.
+
+```{r, fig.cap="*Non-hierarchical Cluster analysis*", out.width = '30%',echo=FALSE}
+knitr::include_graphics("images/non_hierarchical_clustering.jpg")
+```
+
+The main method is the K-means clustering. This is the method we will develop in this Module.
+K-means is a centroid model or an iterative clustering algorithm. It works by finding the local maxima in every iteration. 
+
+
+<p>&nbsp;</p>
+
+* **Hierarchical Method**
+
+A set of nested clusters organized as a hierarchical tree.
+The hierarchical methods produce a set of nested clusters in which each pair of objects or clusters is progressively nested in a larger cluster only one cluster remains.
+
+
+```{r, fig.cap="*Hierarchical Cluster analysis*", out.width = '30%',echo=FALSE}
+knitr::include_graphics("images/Hierarchical_Clustering.jpg")
+```
+
+<p>&nbsp;</p>
+
+Other methods are:
+
+* **Density-based Method**
+* **Grid-Based Method**
+* **Model-Based Method**
+* **Constraint-based Method**
+
+<p>&nbsp;</p>
+## **Building Clusters**
+<p>&nbsp;</p>
+
+In order to start proceding Cluster analysis we need to (1) select the distance measure that is the best for our data, and (2) select the most relevant cluster algorithm.
+
+### **Select a distance measure**
+
+
+To measure similarities between two observations a distance measure is needed. Multiple variables require an aggregate distance measure.
+The classical methods for distance measures are Euclidean and Manhattan distances, which are defined as follow:
+
+```{r, fig.cap="*Hierarchical Cluster analysis*", out.width = '80%',echo=FALSE}
+knitr::include_graphics("images/Euclidean_ManhattanDistances.jpg")
+```
+Other distance measures are Pearson correlation distance, Spearman correlation distance, Kendall correlation distance. For more information look at: [UC Business Analytics R Programming Guide](https://uc-r.github.io/kmeans_clustering).
+
+The choice of distance measures is very important, as it has a strong influence on the clustering results. For most common clustering software, the default distance measure is the Euclidean distance. However, depending on the type of the data and the research questions, other dissimilarity measures might be preferred and you should be aware of the options.
+
+<p>&nbsp;</p>
+
+### **Select a clustering algorithms**
+
+
+* k-mean clustering algorithm
+
+K-means clustering is the most commonly used unsupervised machine learning algorithm for partitioning a given data set into a set of k groups (i.e. k clusters), where k represents the number of groups pre-specified by the analyst. It classifies objects in multiple groups (i.e., clusters), such that objects within the same cluster are as similar as possible (i.e., high intra-class similarity), whereas objects from different clusters are as dissimilar as possible (i.e., low inter-class similarity). In k-means clustering, each cluster is represented by its center (i.e, centroid) which corresponds to the mean of points assigned to the cluster.
+
+
+K-means algorithm can be summarized as follows:
+
+1. Specify the number of clusters (K) to be created (by the analyst)
+2. Select randomly k objects from the data set as the initial cluster centers or means
+3. Assigns each observation to their closest centroid, based on the Euclidean distance between the object and the centroid
+4. For each of the k clusters update the cluster centroid by calculating the new mean values of all the data points in the cluster. The centroid of a Kth cluster is a vector of length p containing the means of all variables for the observations in the kth cluster; p is the number of variables.
+5. Iteratively minimize the total within sum of square. That is, iterate steps 3 and 4 until the cluster assignments stop changing or the maximum number of iterations is reached. By default, the R software uses 10 as the default value for the maximum number of iterations.
+
+
+```{r, fig.cap="*K-mean Clustering*", out.width = '40%',echo=FALSE}
+knitr::include_graphics("images/K_meanClustering.jpg")
+```
+
+
+
+
+
+Other common clustering algorithms are:
+
+
+* Mean-Shift Clustering
+* Density-Based Spatial Clustering of Applications with Noise (DBSCAN)
+* Expectation–Maximization (EM) Clustering using Gaussian Mixture Models (GMM)
+* Agglomerative Hierarchical Clustering
+
+For time constraints we won't develop these algorithms here, but more information can be find here: [The 5 Clustering Algorithms Data Scientists Need to Know](https://techvidvan.com/tutorials/cluster-analysis-in-r/)
+
+
+<p>&nbsp;</p>
+
+
+
+# **Application of the Cluster Analysis method to a Geochemical Data Set**
+
+
+Here I choose to use the K-means clustering method, as recommended in the literature for the analysis of soil properties data.
+<p>&nbsp;</p>
+
+## **Background of the study**
+
+
+*The data set used in this section was collected in 2019 as part of my dissertation research fieldwork.*
+
+The project investigates plant establishment and soil formation in nine recently deglacierized alpine landscapes on two continents.  Most mountain glaciers will disappear by the end of the 21st century, leaving an ice-free land larger than the state of Kansas. People and ecosystems depend on these glaciers, but as the glaciers melt, water resources, carbon storage, pastures, cultural identities, and tourism activities degrade. These new lands, however, offer opportunities to study ecological and social adaptation but the time for studying these ‘natural’ laboratories is limited. Research indicates which proglacial environmental conditions lead to healthy and stable ecosystems and thus how we can facilitate and accelerate these.
+
+*Here is an example of two recenty deglaciated landscapes in the French Alps.*
+```{r, fig.cap="*Tour (left) and Gébroulaz (right) proglacial Landscapes*", out.width = '80%',echo=FALSE}
+knitr::include_graphics("images/Tour_Gebroulaz.jpg")
+```
+
+The study sites include the Peruvian Tropical Andes (Yanamarey, Uruashraju and Broggi) and the European Alps (Glacier Blanc, Tour, Pélerins, Saint Sorlin, Gébroulaz, and Orny), setting up a biogeographical comparison between the two continents. 
+In 2019 we collected a total of 189 soil samples, which correspond to approximately to 17 to 25 soil samples collected per sites.
+During spring 2020 and fall 2021 we have conducted several soil analysis in our Soil and Archeology lab at UT Austin. We measured pH, bulk density, soil organic matter and use X-ray fluorescence (XRF) to determine the elemental composition of the samples.
+
+
+```{r, fig.cap="*Overview of the 9 study sites*", out.width = '100%',echo=FALSE}
+knitr::include_graphics("images/GlaciersOverview.jpg")
+```
+
+<p>&nbsp;</p>
+## **Data exploration**
+
+The Soil_properties dataset describes the composition of 153 of the soil samples collected at the nine study sites.
+34 samples are not considered is these analyses since they correspond to our control areas which are zones that are deglaciated since the Little Ice Age (1850).
+All variables are qualitative:
+
+* pH: measure of how acidic/basic soils are.
+
+* BD: bulk density, is the volumetric density of the soil. It is a proxy for soil development, indicating the presences of soil pores, and soil particules aggregation.
+
+* SOC:Soil Organic matter, measured using the Loss of Ignition method.
+
+* Elemental composition: Al, Si, P, S, K, Ca, Ti, V, Cr, Mn, Fe, Ni, Cu, Zn, As, Rb, Sr, Y, Zr, Nb, Mo, Sn, Ta, Hg, Pb, Th, U, LE (light elements)
+
+First, let's load the data:
+
+```{r}
+f<-"https://raw.githubusercontent.com/anaiszimmer/Package_Vignette_ClusterAnalysis/main/data/soil_properties.csv"
+Soil_prop<-read_csv(f, col_names = TRUE)
+skimr::skim(Soil_prop)
+
+```
+
+Here we observe that we have 32 variables in our data set.
+
+Let's start exploring the data.
+
+
+```{r}
+
+Soil_prop<-as.data.frame(Soil_prop) #transform original tibble to data frame
+row.names(Soil_prop)<-Soil_prop$Sample_Name #set up row name
+Soil_prop<-Soil_prop%>%select(-Sample_Name)# remove the old Sample_name column
+
+```
+
+Here is two single element biplot of K against P and Fe against S:
+
+```{r}
+
+library(ggplot2)
+library(ggrepel)
+
+# p1 <- ggplot(data = Soil_prop, aes(x = P, y = K, label=rownames(Soil_prop)))+
+#   geom_point(color="red", size=1.5, alpha=0.4)+
+#   geom_text_repel(force=70)
+#   
+# 
+# p2 <- ggplot(data = Soil_prop, aes(x = Al, y = Fe, label=rownames(Soil_prop)))+
+#   geom_point(color="blue4", size=1.5, alpha=0.4)+
+#   geom_text_repel(force=70)
+
+
+p1 <- ggplot(data = Soil_prop, aes(x = P, y = K))+
+  geom_point(color="red", size=1.5, alpha=0.4)
+  
+
+p2 <- ggplot(data = Soil_prop, aes(x = Al, y = Fe))+
+  geom_point(color="blue4", size=1.5, alpha=0.4)
+  
+gridExtra::grid.arrange(p1, p2, ncol = 2)
+
+```
+
+On both plot we observe two groups of data, which is kind of interesting. 
+
+But now what about the rest of the data? With a system comprised of 30 elements, we would need to look at more than 400 individual cross plots simultaneously. By taking advantage of machine learning and some visualization techniques, we can extract meaning from the data no matter the number of features.
+
+<p>&nbsp;</p>
+
+## **Diving into Cluster analysis**
+
+### **Data preparation**
+
+First we need to Prepare our data for further analysis.
+
+To perform a cluster analysis in R, generally, the data should be prepared as follows:
+
+1. Rows are observations (individuals) and columns are variables
+We don't want a column with the Name of the Samples as part of the data frame. Instead we want the Sample names set up as row name.
+
+2. Any missing value in the data must be removed or estimated.
+We have already removed the columns with NA data from the original data set.
+In addition, the remaining NA correspond to LOD (Limit of Detection) then we assume they are very close to 0.
+We replace NA value by zero. 
+
+3. The data must be standardized (i.e., scaled) to make variables comparable. Recall that, standardization consists of transforming the variables such that they have mean zero and standard deviation one.As we don’t want the clustering algorithm to depend to an arbitrary variable unit, we start by scaling/standardizing the data using the R function scale.
+
+Let's call our scaled dataframe df for the continuing steps.
+
+
+
+```{r}
+# All data need to be numeric
+Soil_prop$V<-as.numeric(Soil_prop$V)
+Soil_prop$Cr<-as.numeric(Soil_prop$Cr)
+Soil_prop$Cu<-as.numeric(Soil_prop$Cu)
+Soil_prop$Sn<-as.numeric(Soil_prop$Sn)
+Soil_prop$Hg<-as.numeric(Soil_prop$Hg)
+Soil_prop$Ni<-as.numeric(Soil_prop$Ni)
+
+#Replacing the NA by 0
+Soil_prop[is.na(Soil_prop)] <- 0
+
+# Scaling the data
+df<-Soil_prop%>%scale()%>%as.data.frame()
+#df[is.na(df)] <- 0
+
+#Here we can compare the original database (Soil_Prop) and the transformed data frame (df)
+head(Soil_prop,3)
+head(df,3)
+```
+<p>&nbsp;</p>
+
+### **Clustering Distance Measures**
+
+
+As we mentionned previously the two most common distance measures are the Euclidean and the Manhattan distances.
+Here we can visualize the distance matrix using the fviz_dist() R built in function from the package {factoextra}:
+
+*Note: The default distance computed by fviz_dist() is the Euclidean.*
+
+Euclidian distance matrix:
+
+```{r,fig.width=6, fig.height=4}
+
+E_distance <- get_dist(df, method="euclidean")
+fviz_dist(E_distance, gradient = list(low = "#00AFBB", mid = "white", high = "#FC4E07"), show_labels=TRUE, lab_size=4)
+
+```
+
+And for the Manhattan:
+
+```{r,fig.width=6, fig.height=4}
+M_distance <- get_dist(df, method="manhattan")
+fviz_dist(M_distance, gradient = list(low = "#00AFBB", mid = "white", high = "#FC4E07"), show_labels=TRUE, lab_size=4)
+```
+
+<p>&nbsp;</p>
+### **Determining the optimal number of clusters**
+
+The first step when using k-means clustering is to indicate the number of clusters (k) that will be generated in the final solution. 
+There are three methods: the Elbow, Average Silhouette Method and the Gap Statistic Method.
+<p>&nbsp;</p>
+
+* **Elbow method or Total within sum of square method.** 
+
+The total within-cluster sum of square (wss) measures the compactness of the clustering and we want it to be as small as possible.
+
+Here we use the already built fviz_nbclust () function, where "wss" stand for total within sum of square.
+
+```{r,fig.width=4, fig.height=3}
+fviz_nbclust(df,kmeans,method="wss")
+```
+
+Looking at the graph, we might want to start our cluster analysis using k=3. But this is not very clear, you could also accept 5 or 7.
+ <p>&nbsp;</p>
+ 
+ 
+ * **Average Silhouette Method**
+ 
+The average silhouette approach measures the quality of a clustering. That is, it determines how well each object lies within its cluster. A high average silhouette width indicates a good clustering. 
+ 
+```{r,fig.width=4, fig.height=3}
+ 
+ fviz_nbclust(df, kmeans, method = "silhouette")
+
+```
+
+Here the Average Silhouette Method indicate a number of cluster equal to 6
+<p>&nbsp;</p>
+
+* **Gap Statistic Method**
+
+The approach can be applied to any clustering method (i.e. K-means clustering, hierarchical clustering). The gap statistic compares the total intracluster variation for different values of k with their expected values under null reference distribution of the data (i.e. a distribution with no obvious clustering). 
+
+
+```{r,fig.width=4, fig.height=3}
+library(cluster)
+# compute gap statistic
+set.seed(123)
+gap_stat <- clusGap(df, FUN = kmeans, nstart = 25,
+                    K.max = 10, B = 50)
+
+fviz_gap_stat(gap_stat)
+
+```
+
+As the Average Silhouette Method, the Gap Statistic Method suggests 3 clusters.
+
+
+With most of these approaches suggesting 3 as the number of optimal clusters we can start performing the analysis using 3 clusters.
+
+
+For more information on these 3 methods we can visit: https://uc-r.github.io/kmeans_clustering
+
+
+<p>&nbsp;</p>
+
+### **Computing k-means clustering**
+
+
+We can compute k-means in R with the kmeans function. Here will group the data into three clusters (centers = 3). The kmeans function also has an nstart option that attempts multiple initial configurations and reports on the best one. For example, adding nstart = 25 will generate 25 initial configurations. This approach is often recommended.
+
+
+```{r}
+km.res1 <- kmeans(df, centers=3, nstart = 25)
+
+#Structure
+str(km.res1)
+
+# Print the results
+print(km.res1)
+
+
+#Compute the mean of each variables by clusters using the original data (Soil_prop):
+aggregate(Soil_prop, by=list(cluster=km.res1$cluster), mean)
+
+#add the point classifications to the original data
+dd1 <- cbind(Soil_prop, cluster = km.res1$cluster)
+head(dd1,3)
+
+```
+
+
+Finally we can create a summary table of the cluster mean for each variable
+
+```{r}
+
+summary<-dd1%>%group_by(cluster)%>%summarise_at(vars(pH, SOC, Skeleton, BD, Al, Si,
+                                  P, S,K,Ca, Ti, V, Cr, Mn, Fe, Ni,Cu, Zn, As, Rb, Sr, 
+                                  Y, Zr, Nb, Mo,Sn,Ta,Hg, Pb,,Th, U, LE), list(mean))%>%round(.,3)
+summary
+
+```
+
+<p>&nbsp;</p>
+
+Plotting our clusters
+
+
+```{r}
+options(ggrepel.max.overlaps = Inf)
+
+fviz_cluster(km.res1,Soil_prop,ellipse.type="norm",geom="text",labelsize = 9,repel=TRUE,
+main="Cluster plot - k=3")
+
+```
+
+Looking at the results table and the cluster graph we can observe that the samples are ordered by study sites:
+
+- Within cluster 1, in red, there are samples from the Glacier Blanc (B), Saint Sorlin (S) and Gébroulaz (GB).
+
+- Within the cluster number 2, in green, we observe samples from the Yanamarey (Y), Uruashraju (U) and Broggi (Br) glacier forefields. Which are all located in the Cordillera Blanca in Peru.
+
+- And in the third clusters, in blue, there are the samples from the Tour (T), Pelerins (P) and Orny (O) glaciers. These three glaciers are located in the Mont Blanc massif in the Alps. Two of them on the French side (Tour and Pelerins) and one (Orny) on the Swiss side.
+
+Previous literature review about the geology of the study shown that the Mont Blanc sites have the highest proportion of granite and a quite homogenous lithology. Whereas, Saint Sorlin, Gébroulaz and Glacier Blanc have a more diverse lithology with the presence of dolerite (Glacier Blanc), schist (Glacier Blanc and Saint Sorlin), and rhyolites, leptynites (Saint Sorlin) and quartzite (Gébroulaz) all silicate rich rocks. The Gébroulaz glacier forefield presents the particularity of having gypsum outcrop, a calcium and sulfur rich mineral. In our cluster analysis it appears that this three glaciers are grouped with "similar" properties. So even if at first sight it seems they have variable lithologies it actually appears they have high intra-class similarity. Whereas the 3 Mont Blanc Sites are also grouped together.
+Finally the 3 Andean sites formed the last cluster. The geology of the Yanamarey, Uruashraju and Broggi valleys is dominated by granodiorite and tonalite intrusive, with some outcrops of the meta-sedimentary Jurassic Chicama formation. Sulfide-rich lithologies are present within the three-glacier forefield and glacier retreat has newly exposed substrates to weathering. Sulfide and pyrite oxidation of the exposed substrates is linked to low pH values (Fortner et al., 2011; Guittard et al., 2020; Magnússon et al., 2020).
+
+To conclude, our cluster analysis show that the geochemical composition, pH, soil organic carbon, bulk density and skeleton properties allow to differentiate our samples and study in three large clusters. These results are crucial to understand the pattern of plant colonization within the different sites, as we can expect different rate of colonization between clusters.
+
+<p>&nbsp;</p>
+
+# **Concept Review**
+
+* A cluster is a group of similar objects (cases, points, observations, examples, members, customers, patients, locations, etc)
+
+* Cluster analysis find the groups of cases/observations/objects in the population such that the objects are:
+
+  ** homogeneous within the groups (high intra-class similarities)
+  
+  ** Heterogeneous between the groups (low inter-class similarities)
+
+
+* k-mean clustering is one of the most clustering method and can its steps can be summarized as follows:
+
+ ** Specify the number of clusters (K)
+ 
+ ** Select randomly k objects from the data set as the initial cluster centers or mean
+ 
+ ** Assigns each observation to their closest centroid, based on the Euclidean distance between the object and the centroid
+ 
+ ** For each of the k clusters update the cluster centroid by calculating the new mean values of all the data points in the cluster.The centroid of a Kth cluster is a vector of length p containing the means of all variables for the observations in the kth cluster; p is the number of variables.
+ 
+ ** Iteratively minimize the total within sum of square. That is, iterate steps 3 and 4 until the cluster assignments stop changing or the maximum number of iterations is reached. By default, the R software uses 10 as the default value for the maximum number of iterations.
+
+<p>&nbsp;</p>
+
+# **Sources**
+
+
+[The 5 Clustering Algorithms Data Scientists Need to Know](https://techvidvan.com/tutorials/cluster-analysis-in-r/)
+
+[Chapter 15 Cluster Analysis - Peter Tryfos - York University](http://www.yorku.ca/ptryfos/f1500.pdf)
+
+[Data Analysis Course by Venkat Reddy](https://www.slideshare.net/21_venkat/cluster-analysis-for-dummies)
+
+[UC Business Analytics R Programming Guide](https://uc-r.github.io/kmeans_clustering)
+
+
+
