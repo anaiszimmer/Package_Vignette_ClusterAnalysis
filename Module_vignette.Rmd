@@ -17,6 +17,7 @@ output:
 In this module, we explore the use of clustering or cluster analysis to assign observations to groups (clusters) so that observations within each group are similar to one another with respect to variables or attributes of interest, and the groups themselves stand apart from one another. 
 <p>&nbsp;</p>
 
+
 # **Preliminaries**
 
 * Install this package in R: {factorextra}
